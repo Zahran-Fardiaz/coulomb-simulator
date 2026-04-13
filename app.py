@@ -4,27 +4,19 @@ import numpy as np
 import plotly.graph_objects as go
 from scipy.optimize import minimize
 
-# 1. KONFIGURASI HALAMAN
 st.set_page_config(page_title="Coulomb Simulator", layout="wide")
 
-# ==========================================
-# 2. INJEKSI CSS KUSTOM
-# ==========================================
 st.markdown("""
     <style>
-    /* Mengubah font utama menjadi gaya terminal/koding */
     html, body, [class*="css"] {
         font-family: 'Consolas', 'Courier New', monospace; 
     }
     
-    /* Menyembunyikan menu bawaan Streamlit dan Footer */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     
-    /* Membuat latar belakang header menjadi transparan agar Sidebar bisa tetap dibuka */
     header {background-color: transparent !important;}
     
-    /* Membuat tombol lebih estetik dan interaktif */
     .stButton>button {
         border-radius: 8px;
         border: 1px solid #4CAF50;
@@ -35,8 +27,7 @@ st.markdown("""
         border: 1px solid #81C784;
         box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
     }
-    
-    /* Modifikasi warna header tab */
+    `x
     .stTabs [data-baseweb="tab-list"] {
         gap: 24px;
     }
@@ -53,13 +44,9 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# INISIALISASI MEMORI
 if 'daftar_muatan' not in st.session_state:
     st.session_state.daftar_muatan = []
 
-# ==========================================
-# 3. FUNGSI FISIKA & OPTIMASI
-# ==========================================
 def hitung_medan_total(tx, ty, tz, muatan_list):
     k = 8.99e9
     Ex, Ey, Ez = 0.0, 0.0, 0.0
@@ -93,9 +80,6 @@ def fungsi_objektif(posisi, tx, ty, tz, muatan_list, q_penyeimbang):
     E_total = np.sqrt((Ex_lama + Ex_baru)**2 + (Ey_lama + Ey_baru)**2 + (Ez_lama + Ez_baru)**2)
     return E_total
 
-# ==========================================
-# 4. SIDEBAR (PANEL KENDALI)
-# ==========================================
 st.sidebar.header("Panel Kendali")
 
 st.sidebar.subheader("1. Konfigurasi Muatan")
@@ -113,7 +97,6 @@ if st.sidebar.button("Bersihkan Seluruh Ruang"):
     st.session_state.daftar_muatan = []
     st.rerun()
 
-# --- BAGIAN YANG DIREVISI: FITUR EDIT MUATAN ---
 if len(st.session_state.daftar_muatan) > 0:
     st.sidebar.markdown("---")
     st.sidebar.markdown("**Daftar Muatan Aktif (Buka untuk edit):**")
@@ -129,7 +112,6 @@ if len(st.session_state.daftar_muatan) > 0:
             if st.button("Hapus Muatan Ini", key=f"del_{i}"):
                 st.session_state.daftar_muatan.pop(i)
                 st.rerun()
-# -----------------------------------------------
 
 st.sidebar.markdown("---")
 
@@ -164,9 +146,6 @@ with st.sidebar.expander("Buka Inverse Problem Solver"):
 # Kalkulasi Real-time
 Ex, Ey, Ez, Emag = hitung_medan_total(t_x, t_y, t_z, st.session_state.daftar_muatan)
 
-# ==========================================
-# 5. MAIN PANEL (LAYOUT TABS)
-# ==========================================
 st.title("Coulomb Simulator")
 st.markdown("**Visualizer Medan Elektrostatis & Simulator Optimasi**")
 
@@ -220,7 +199,6 @@ with tab1:
             lighting=dict(ambient=0.6, diffuse=0.9, roughness=0.1, specular=2.0, fresnel=0.2)
         ))
 
-    # Kunci kamera dengan uirevision agar angle tetap, tapi ruangan bisa auto-zoom
     fig.update_layout(
         uirevision='kunci_kamera_tetap',
         scene=dict(xaxis_title='X', yaxis_title='Y', zaxis_title='Z'), 
